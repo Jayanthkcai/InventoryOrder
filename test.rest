@@ -1,0 +1,31 @@
+POST http://localhost:3000/orders/orders
+Content-Type: application/json
+
+{
+  "type": "order_placed",
+  "userid": "b1a8e93d-0c91-4a83-bf1e-bb93450ccaa1",
+  "shipping_address": {
+    "address_line1": "addr23",
+    "address_line2": "addr23",
+    "postal_code": "560001",
+    "state": "ka",
+    "country": "ind"
+  },
+  "items": [
+    {
+      "quantity": 15,
+      "unit_price": "250.5",
+      "productId": "ec8b5ad4-df3e-4e75-bd57-9281d75b1213"
+    },
+    {
+      "quantity": 2,
+      "unit_price": "110",
+      "productId": "83e4d41d-2a1e-49d4-b539-52b21965b1b8"
+    },
+    {
+      "quantity": 60000,
+      "unit_price": "350.49",
+      "productId": "fa354bcb-79f1-4e8e-bd16-3b0a3c9ec3cd"
+    }
+  ]
+}

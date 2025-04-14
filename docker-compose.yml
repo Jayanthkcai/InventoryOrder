@@ -1,0 +1,129 @@
+services:
+  auth-service:
+    build:
+      context: ./authentication
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - API_GATEWAY_URL=http://auth-service:3002/
+    networks:
+      - supplychain-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  backend-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - API_GATEWAY_URL=http://api-gateway:8080/
+    networks:
+      - supplychain-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  client-app:
+    build:
+      context: ./clinetapp
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    networks:
+      - supplychain-network
+    depends_on:
+      auth-service:
+        condition: service_started
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=Password123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - supplychain-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'echo ''db.runCommand("ping").ok'' | mongosh --quiet --username admin --password Password123 admin',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmqpubsub
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASSWORD=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - supplychain-network
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq-init:/docker-entrypoint-init.d
+    user: root
+    command: >
+      sh -c "chown -R rabbitmq:rabbitmq /var/lib/rabbitmq && chmod +x /docker-entrypoint-init.d/init.sh && docker-entrypoint.sh rabbitmq-server"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  postgres:
+    image: postgres
+    container_name: pg
+    restart: always
+    environment:
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=examplepwd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
+    networks:
+      - supplychain-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U example"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  supplychain-network:
+    driver: bridge # Removed extra quotation mark at the end
+
+volumes:
+  rabbitmq-data: # This defines the "rabbit-data" volume for persistence
+  mongo-data: # This defines the "mongo-data" volume for persistence
+    driver: local # Optional, default is "local" but can be customized for other drivers
+  postgres-data: # This defines the "postgres-data" volume for persistence
+    driver: local # Optional, default is "local" but can be customized for other drivers
+

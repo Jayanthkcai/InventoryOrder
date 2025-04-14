@@ -1,0 +1,129 @@
+
+###create user
+POST http://localhost:3002/user/createuser
+Content-Type: application/json
+
+{
+    "email": "jayanth.kc@gmail.com",
+    "password": "pa$$word"
+}
+### Password rest link request
+POST http://localhost:3000/forgotpwd/restpwdreq
+Content-Type: application/json
+
+{
+    "email": "jayanth.kc@gmail.com"
+}
+
+### Password rest 
+POST http://localhost:3000/forgotpwd/restpwd
+Content-Type: application/json
+
+{
+  "email": "jayanth.kc@gmail.com",
+  "resetToken": "$2b$10$V9kqGsZOtaO.NRihWnEKren/1FTgQjdeyNB10lAHQLFNh/Q4IMl7i",
+  "password": "pa$$word1"
+}
+
+### login test
+POST http://localhost:3002/authlogin/login
+
+Content-Type: application/json
+
+{"email": "jayanth.kc@gmail.com","password": "pa$$word1"}
+
+### Login 
+POST http://localhost:3002/authlogin/login
+Content-Type: application/json
+
+{
+  "email": "jayanth.kc@gmail.com",
+  "password": "pa$$word"
+}
+
+### token 
+POST http://localhost:3000/authlogin/token
+Content-Type: application/json
+
+{
+  "email": "jayanth.kc@gmail.com",
+  "refreshtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiamF5YW50aC5rY0BnbWFpbC5jb20iLCJpYXQiOjE3Mzc5OTY1MDF9.iaqw5nhARtAPxvwm4948GOPds51uEZ7Z5H9rfAOiJR4"
+}
+
+### verify 
+GET http://localhost:3000/authlogin/verify
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiamF5YW50aC5rY0BnbWFpbC5jb20iLCJpYXQiOjE3Mzc5OTk1NDAsImV4cCI6MTczNzk5OTU3MH0.OdWJjASEf9XNZLqIlHYw5NWgWS_DxnzLlMx7Fm4WZDA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 
+
+
+
+
+
+
+
+
+GET http://localhost:9000/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0ZXN0MSIsImlhdCI6MTczNzI5MDYzMywiZXhwIjoxNzM3MjkwNjYzfQ.qtwAIJEhR4b8ZeqQ63usHJMOY-LAdQbKJ8OOZN4Br3o
+
+### Users
+GET http://localhost:9000/users
+
+###
+POST http://localhost:9000/users
+Content-Type: application/json
+
+{
+    "uid": "jayanth.kc@gmail.com",
+    "pwd": "pa$$word"
+}
+
+### login request
+POST http://localhost:9000/login
+Content-Type: application/json
+
+{
+    "uid": "jayanth.kc@gmail.com",
+    "pwd": "pa$$word"
+}
+
+###
+POST http://localhost:9000/token
+Content-Type: application/json
+
+{
+    "refresh_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0ZXN0MSIsInB3ZCI6IiQyYiQxMCR4Q3pjbmVXSVh3SXN2NndPa1NpNlB1eXpBNng4amFTYWlQSFdDSnR0Zy5yNC82bmNqVmp3SyIsImlhdCI6MTczNzI5MDQ4N30.BhL_BLkTQ675BKJf6QJcnFhsIMFM96XPTEUUM1u-SME"
+}
+
+###
+DELETE http://localhost:9000/logout
+Content-Type: application/json
+
+{
+    "refresh_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0ZXN0MSIsInB3ZCI6IiQyYiQxMCR4Q3pjbmVXSVh3SXN2NndPa1NpNlB1eXpBNng4amFTYWlQSFdDSnR0Zy5yNC82bmNqVmp3SyIsImlhdCI6MTczNzI5MDQ4N30.BhL_BLkTQ675BKJf6QJcnFhsIMFM96XPTEUUM1u-SME"
+}
